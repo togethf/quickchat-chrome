@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>图标生成器</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #1a1a2e;
+      color: white;
+    }
+    canvas {
+      border: 1px solid #333;
+      margin: 10px;
+      background: white;
+    }
+    button {
+      padding: 10px 20px;
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .info {
+      margin: 20px 0;
+      padding: 15px;
+      background: #16213e;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Sidebar Chat 图标生成器</h1>
+
+  <div class="info">
+    <p>1. 点击下方按钮生成图标</p>
+    <p>2. 右键点击生成的图标，选择"图片另存为"</p>
+    <p>3. 分别保存为 icons/icon16.png, icons/icon48.png, icons/icon128.png</p>
+  </div>
+
+  <button onclick="generateIcons()">生成图标</button>
+
+  <div id="canvases"></div>
+
+  <script>
+    function generateIcons() {
+      const container = document.getElementById('canvases');
+      container.innerHTML = '';
+
+      const sizes = [16, 48, 128];
+
+      sizes.forEach(size => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // 背景渐变
+        const gradient = ctx.createLinearGradient(0, 0, size, size);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, size, size);
+
+        // 绘制 AI 图标（简化的对话框 + 星星）
+        ctx.fillStyle = 'white';
+
+        // 对话框形状
+        const margin = size * 0.2;
+        const bubbleSize = size * 0.6;
+        ctx.beginPath();
+        ctx.roundRect(margin, margin, bubbleSize, bubbleSize, size * 0.15);
+        ctx.fill();
+
+        // 星星/火花
+        const starSize = size * 0.15;
+        const cx = size / 2;
+        const cy = size / 2;
+
+        // 简单的十字星
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - starSize);
+        ctx.lineTo(cx, cy + starSize);
+        ctx.moveTo(cx - starSize, cy);
+        ctx.lineTo(cx + starSize, cy);
+        ctx.strokeStyle = '#e94560';
+        ctx.lineWidth = Math.max(2, size * 0.05);
+        ctx.stroke();
+
+        // 添加下载链接
+        const downloadLink = document.createElement('a');
+        downloadLink.href = canvas.toDataURL('image/png');
+        downloadLink.download = `icon${size}.png`;
+        downloadLink.textContent = `下载 ${size}x${size} 图标`;
+        downloadLink.style.display = 'block';
+        downloadLink.style.marginTop = '5px';
+        downloadLink.style.color = '#e94560';
+
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'inline-block';
+        wrapper.style.textAlign = 'center';
+        wrapper.appendChild(canvas);
+        wrapper.appendChild(downloadLink);
+
+        container.appendChild(wrapper);
+      });
+    }
+
+    // 自动生成
+    generateIcons();
+  </script>
+</body>
+</html>
